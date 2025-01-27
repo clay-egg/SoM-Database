@@ -25,3 +25,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 Hi I'm Leo 
 I'm Clay
+Hi Mingalar par taw thar twy
