@@ -26,11 +26,11 @@ export default {
         const result = await signInWithPopup(auth, provider);
         const userEmail = result.user.email;
 
-        if (/^(jeerapan.san|sutin.tan|supak|6531503172)@mfu.ac.th$/.test(userEmail)) {
+          if (userEmail === '6531503172@lamduan.mfu.ac.th') {
           router.push({ name: 'SecretaryPage' });
-        } else if (/^(siripen.yia|supansa.cha|6531503176)@mfu.ac.th$/.test(userEmail)) {
+        } else if (userEmail === '6531503176@lamduan.mfu.ac.th') {
           router.push({ name: 'DeanPage' });
-        } else if (/^\d+@lamduan\.mfu\.ac\.th$/.test(userEmail) || /@mfu.ac.th$/.test(userEmail)) {
+        } else if (userEmail === '6531503174@lamduan.mfu.ac.th') {
           router.push({ name: 'LecturerPage' });
         } else {
           alert('Access denied: This email is not associated with an authorized role.');
