@@ -1,7 +1,7 @@
 <template>
   <div class="homepage">
-    <!-- Banner -->
-    <div class="banner">
+    <!-- App Bar -->
+    <div class="app-bar">
       <h1>SoM Database</h1>
     </div>
 
@@ -116,6 +116,12 @@
         <p>Please select a category from the dropdown to view content.</p>
       </div>
     </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>&copy; 2023 SoM Database. All rights reserved.</p>
+      <p>Contact us: <a href="mailto:support@somdatabase.com">support@somdatabase.com</a></p>
+    </div>
   </div>
 </template>
 
@@ -145,20 +151,25 @@ export default {
 .homepage {
   font-family: 'Arial', sans-serif;
   text-align: center;
-  padding: 30px;
+  padding: 0;
+  margin: 0;
   color: #333;
   background-color: #f9f9f9;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.banner {
+.app-bar {
   background: linear-gradient(to right, #034E69, #05678A, #08A1C4);
   color: white;
-  padding: 40px 20px;
+  padding: 20px;
   border-radius: 8px;
   margin-bottom: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.banner h1 {
+.app-bar h1 {
   font-size: 2.5rem;
   margin: 0;
 }
@@ -195,6 +206,7 @@ export default {
 
 .content-section {
   margin-top: 30px;
+  flex: 1;
 }
 
 .section-content {
@@ -272,6 +284,30 @@ button:hover {
   background-color: #034E69;
 }
 
+.footer {
+  background-color: #034E69;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px;
+  margin-top: auto; /* Ensures footer stays at the bottom */
+  width: 100%;
+}
+
+
+.footer p {
+  margin: 5px 0;
+}
+
+.footer a {
+  color: white;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
 /* Responsive Design */
 @media (max-width: 1200px) {
   .dropdown-menu {
@@ -288,7 +324,7 @@ button:hover {
 }
 
 @media (max-width: 768px) {
-  .banner h1 {
+  .app-bar h1 {
     font-size: 2rem;
   }
 
@@ -324,7 +360,7 @@ button:hover {
 }
 
 @media (max-width: 480px) {
-  .banner h1 {
+  .app-bar h1 {
     font-size: 1.6rem;
   }
 
