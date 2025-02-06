@@ -59,16 +59,15 @@ export default {
   name: 'LecturerPage',
   data() {
     return {
-      lecturerName: 'Prof. John Doe',
-      profilePhoto: require('@/assets/logo.png'), // Use logo.png from the assets folder
-      selectedOption: 'kpi', // Default to KPI
-      isAuthenticated: false, // Add authentication state
-      showLogoutModal: false, // Control modal visibility
+      lecturerName: '',
+      profilePhoto: '',
+      selectedOption: 'kpi',
+      isAuthenticated: false,
+      showLogoutModal: false,
     };
   },
   computed: {
     currentPage() {
-      // Map the selected option to the corresponding component
       const pages = {
         kpi: KpiPage,
         'instructor-schedule': InstructorSchedulePage,
@@ -83,28 +82,38 @@ export default {
       console.log(`Navigated to: ${this.selectedOption}`);
     },
     openLogoutModal() {
-      this.showLogoutModal = true; // Show the logout confirmation modal
+      this.showLogoutModal = true;
     },
     cancelLogout() {
-      this.showLogoutModal = false; // Hide the modal if the user cancels
+      this.showLogoutModal = false;
     },
     async confirmLogout() {
       try {
         await signOut(auth);
-        this.$router.push('/'); // Redirect to login page after logout
-        this.showLogoutModal = false; // Hide the modal after logout
+        this.$router.push('/');
+        this.showLogoutModal = false;
       } catch (error) {
         console.error("Error during logout: ", error);
-        this.showLogoutModal = false; // Hide the modal if there's an error
+        this.showLogoutModal = false;
       }
     },
   },
   created() {
-    // Check authentication state on component creation
     auth.onAuthStateChanged(user => {
-      this.isAuthenticated = !!user; // Set authentication state based on user
-    });
-  },
+  if (user) {
+    this.isAuthenticated = true;
+    this.lecturerName = user.displayName;
+    this.profilePhoto = user.photoURL;
+
+    console.log("Profile Photo URL:", this.profilePhoto); // Debugging
+    this.$forceUpdate(); // Force Vue to refresh UI
+  } else {
+    this.isAuthenticated = false;
+    this.$router.push('/');
+  }
+});
+}
+,
 };
 </script>
 

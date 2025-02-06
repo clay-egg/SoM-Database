@@ -20,12 +20,10 @@
   
         <!-- Right Section: Profile -->
         <div class="profile">
-          <img :src="profilePhoto" alt="Profile Photo" class="profile-photo" />
-          <div class="profile-info">
-            <h2 class="profile-name">{{ deanName }}</h2>
-          </div>
-        </div>
+        <img :src="profilePhoto" alt="Profile Photo" class="profile-photo" v-if="profilePhoto" />
+        <p class="profile-name">{{ deanName }}</p>
       </div>
+    </div>
   
       <!-- Placeholder for Selected Page -->
       <div class="page-content">
@@ -56,57 +54,66 @@
   import { auth } from '../firebase'; // Assuming the Firebase authentication is set up
   
   export default {
-    name: 'DeanPage',
-    data() {
-      return {
-        deanName: 'Prof. John Doe',
-        profilePhoto: require('@/assets/logo.png'), // Use logo.png from the assets folder
-        selectedOption: 'kpi', // Default to KPI
-        isAuthenticated: false, // Add authentication state
-        showLogoutModal: false, // Control modal visibility
+  name: 'DeanPage',
+  data() {
+    return {
+      deanName: '',
+      profilePhoto: '',
+      selectedOption: 'kpi',
+      isAuthenticated: false,
+      showLogoutModal: false,
+    };
+  },
+  computed: {
+    currentPage() {
+      const pages = {
+        kpi: KpiPage,
+        'instructor-schedule': InstructorSchedulePage,
+        budget: BudgetPage,
+        'self-development': SelfDevelopmentPage,
       };
+      return pages[this.selectedOption];
     },
-    computed: {
-      currentPage() {
-        // Map the selected option to the corresponding component
-        const pages = {
-          kpi: KpiPage,
-          'instructor-schedule': InstructorSchedulePage,
-          budget: BudgetPage,
-          'self-development': SelfDevelopmentPage,
-        };
-        return pages[this.selectedOption];
-      },
+  },
+  methods: {
+    navigateToPage() {
+      console.log(`Navigated to: ${this.selectedOption}`);
     },
-    methods: {
-      navigateToPage() {
-        console.log(`Navigated to: ${this.selectedOption}`);
-      },
-      openLogoutModal() {
-        this.showLogoutModal = true; // Show the logout confirmation modal
-      },
-      cancelLogout() {
-        this.showLogoutModal = false; // Hide the modal if the user cancels
-      },
-      async confirmLogout() {
-        try {
-          await signOut(auth);
-          this.$router.push('/'); // Redirect to login page after logout
-          this.showLogoutModal = false; // Hide the modal after logout
-        } catch (error) {
-          console.error("Error during logout: ", error);
-          this.showLogoutModal = false; // Hide the modal if there's an error
-        }
-      },
+    openLogoutModal() {
+      this.showLogoutModal = true;
     },
-    created() {
-      // Check authentication state on component creation
-      auth.onAuthStateChanged(user => {
-        this.isAuthenticated = !!user; // Set authentication state based on user
-      });
+    cancelLogout() {
+      this.showLogoutModal = false;
     },
-  };
-  </script>
+    async confirmLogout() {
+      try {
+        await signOut(auth);
+        this.$router.push('/');
+        this.showLogoutModal = false;
+      } catch (error) {
+        console.error("Error during logout: ", error);
+        this.showLogoutModal = false;
+      }
+    },
+  },
+  created() {
+    auth.onAuthStateChanged(user => {
+  if (user) {
+    this.isAuthenticated = true;
+    this.deanName = user.displayName;
+    this.profilePhoto = user.photoURL;
+
+    console.log("Profile Photo URL:", this.profilePhoto); // Debugging
+    this.$forceUpdate(); // Force Vue to refresh UI
+  } else {
+    this.isAuthenticated = false;
+    this.$router.push('/');
+  }
+});
+}
+,
+};
+</script>
   
   <style scoped>
   /* App Bar */

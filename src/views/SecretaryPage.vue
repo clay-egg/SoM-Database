@@ -43,6 +43,7 @@
         </div>
       </div>
     </div>
+    
     <div v-else class="loading">Loading...</div> <!-- Show loading state -->
   </template>
   
@@ -52,23 +53,22 @@
   import InstructorSchedulePage from './InstructorSchedulePage.vue';
   import BudgetPage from './BudgetPage.vue';
   import SelfDevelopmentPage from './SelfDevelopmentPage.vue';
-  import { signOut } from 'firebase/auth';
-  import { auth } from '../firebase'; // Assuming the Firebase authentication is set up
+  import { signOut, getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged } from 'firebase/auth';
+  import { auth } from '../firebase';  // Make sure this points to the correct Firebase configuration
   
   export default {
     name: 'SecretaryPage',
     data() {
       return {
-        secretaryName: 'Prof. John Doe',
-        profilePhoto: require('@/assets/logo.png'), // Use logo.png from the assets folder
-        selectedOption: 'kpi', // Default to KPI
-        isAuthenticated: false, // Add authentication state
-        showLogoutModal: false, // Control modal visibility
+        secretaryName: '',
+        profilePhoto: '',
+        selectedOption: 'kpi',
+        isAuthenticated: false,
+        showLogoutModal: false,
       };
     },
     computed: {
       currentPage() {
-        // Map the selected option to the corresponding component
         const pages = {
           kpi: KpiPage,
           'instructor-schedule': InstructorSchedulePage,
@@ -83,27 +83,40 @@
         console.log(`Navigated to: ${this.selectedOption}`);
       },
       openLogoutModal() {
-        this.showLogoutModal = true; // Show the logout confirmation modal
+        this.showLogoutModal = true;
       },
       cancelLogout() {
-        this.showLogoutModal = false; // Hide the modal if the user cancels
+        this.showLogoutModal = false;
       },
       async confirmLogout() {
         try {
           await signOut(auth);
-          this.$router.push('/'); // Redirect to login page after logout
-          this.showLogoutModal = false; // Hide the modal after logout
+          this.$router.push('/');
+          this.showLogoutModal = false;
         } catch (error) {
           console.error("Error during logout: ", error);
-          this.showLogoutModal = false; // Hide the modal if there's an error
+          this.showLogoutModal = false;
         }
       },
     },
     created() {
-      // Check authentication state on component creation
-      auth.onAuthStateChanged(user => {
-        this.isAuthenticated = !!user; // Set authentication state based on user
-      });
+      const authInstance = getAuth();
+      setPersistence(authInstance, browserLocalPersistence)
+        .then(() => {
+          onAuthStateChanged(authInstance, (user) => {
+            if (user) {
+              this.isAuthenticated = true;
+              this.secretaryName = user.displayName || 'Secretary';  // Default name if empty
+              this.profilePhoto = user.photoURL || '/path/to/default/profile-photo.jpg';  // Default photo if empty
+            } else {
+              this.isAuthenticated = false;
+              this.$router.push('/');  // Redirect to login page if not authenticated
+            }
+          });
+        })
+        .catch((error) => {
+          console.error("Error setting persistence:", error);
+        });
     },
   };
   </script>

@@ -15,19 +15,19 @@ const routes = [
     path: '/lecturer',
     name: 'LecturerPage',
     component: LecturerPage,
-    meta: { requiresAuth: true, requiredRole: 'lecturer' },
+    meta: { requiresAuth: true },
   },
   {
     path: '/dean',
     name: 'DeanPage',
     component: DeanPage,
-    meta: { requiresAuth: true, requiredRole: 'dean' },
+    meta: { requiresAuth: true },
   },
   {
     path: '/secretary',
     name: 'SecretaryPage',
     component: SecretaryPage,
-    meta: { requiresAuth: true, requiredRole: 'secretary' },
+    meta: { requiresAuth: true },
   },
 ];
 
@@ -36,36 +36,31 @@ const router = createRouter({
   routes,
 });
 
-// Firebase Auth initialization check to prevent flashing the home page
-let isAuthInitialized = false;
-
 router.beforeEach((to, from, next) => {
-  if (!isAuthInitialized) {
-    // Wait until Firebase Auth is ready
+  // Check if the route requires authentication
+  if (to.meta.requiresAuth) {
+    // Firebase authentication check
     auth.onAuthStateChanged(user => {
-      isAuthInitialized = true;
       if (user) {
-        // Redirect based on the role
-        if (user.email === 'dean@gmail.com' && to.meta.requiredRole === 'dean') {
+        // Redirect to the correct page based on user email
+        const userEmail = user.email;
+        if (userEmail === '6531503172@lamduan.mfu.ac.th' && to.name === 'SecretaryPage') {
           next();
-        } else if (user.email === 'lecturer@gmail.com' && to.meta.requiredRole === 'lecturer') {
+        } else if (userEmail === '6531503176@lamduan.mfu.ac.th' && to.name === 'DeanPage') {
           next();
-        } else if (user.email === 'secretary@gmail.com' && to.meta.requiredRole === 'secretary') {
+        } else if (userEmail === '6531503174@lamduan.mfu.ac.th' && to.name === 'LecturerPage') {
           next();
         } else {
-          next({ name: 'HomePage' }); // Redirect if roles don't match
+          // Redirect to HomePage if role doesn't match
+          next({ name: 'HomePage' });
         }
       } else {
-        // User is not authenticated
-        if (to.meta.requiresAuth) {
-          next({ name: 'HomePage' }); // Redirect to HomePage if auth required but not authenticated
-        } else {
-          next(); // Proceed if no auth is required
-        }
+        // If not logged in, redirect to HomePage
+        next({ name: 'HomePage' });
       }
     });
   } else {
-    next(); // Proceed to the next route if auth is already initialized
+    next(); // If no authentication required, continue to the next route
   }
 });
 

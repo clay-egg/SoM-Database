@@ -6,9 +6,9 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'; // Use ref and onMounted from Vue Composition API
+import { ref, onMounted } from 'vue'; // Vue Composition API
 import { auth } from './firebase'; // Firebase auth import
-import { useRouter } from 'vue-router'; // Import Vue Router
+import { useRouter } from 'vue-router'; // Vue Router
 
 export default {
   name: 'App',
@@ -19,13 +19,25 @@ export default {
     // Wait for Firebase auth state to be determined before showing the app
     onMounted(() => {
       auth.onAuthStateChanged(user => {
-        isLoading.value = false; // Hide loading screen when Firebase is ready
+        isLoading.value = false; // Hide loading screen once the auth state is resolved
 
         if (user) {
-          // If the user is logged in, replace the current page state
-          if (router.currentRoute.name === 'HomePage') {
-            router.replace({ name: 'LecturerPage' }); // Or route to appropriate page based on role
+          // Redirect to appropriate page based on user email
+          const userEmail = user.email;
+
+          if (userEmail === '6531503172@lamduan.mfu.ac.th') {
+            router.replace({ name: 'SecretaryPage' });
+          } else if (userEmail === '6531503176@lamduan.mfu.ac.th') {
+            router.replace({ name: 'DeanPage' });
+          } else if (userEmail === '6531503174@lamduan.mfu.ac.th') {
+            router.replace({ name: 'LecturerPage' });
+          } else {
+            alert('Access denied: This email is not associated with an authorized role.');
+            router.replace({ name: 'LoginPage' }); // Redirect to login if not authorized
           }
+        } else {
+          // If no user is logged in, route to login page
+          router.replace({ name: 'HomePage' });
         }
       });
     });
