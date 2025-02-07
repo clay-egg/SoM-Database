@@ -2,10 +2,11 @@
   <div class="lecturer-page" v-if="isAuthenticated">
     <!-- App Bar -->
     <header class="app-bar">
-      <h1>Lecturer Dashboard</h1>
+      <div class="app-title">📘 Lecturer Panel</div>
       <button @click="openLogoutModal" class="logout-button">Logout</button>
     </header>
 
+    <!-- Main Content -->
     <div class="content-container">
       <!-- Left Section: Menu -->
       <div class="menu">
@@ -27,12 +28,12 @@
       </div>
     </div>
 
-    <!-- Placeholder for Selected Page -->
+    <!-- Dynamic Content -->
     <div class="page-content">
       <component :is="currentPage" />
     </div>
 
-    <!-- Logout Confirmation Modal -->
+    <!-- Logout Modal -->
     <div v-if="showLogoutModal" class="logout-modal">
       <div class="modal-content">
         <h3>Are you sure you want to logout?</h3>
@@ -42,18 +43,22 @@
         </div>
       </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>© 2025 Lecturer Management System | All Rights Reserved</p>
+    </footer>
   </div>
   <div v-else class="loading">Loading...</div> <!-- Show loading state -->
 </template>
 
 <script>
-// Import your pages
 import KpiPage from './KpiPage.vue';
 import InstructorSchedulePage from './InstructorSchedulePage.vue';
 import BudgetPage from './BudgetPage.vue';
 import SelfDevelopmentPage from './SelfDevelopmentPage.vue';
 import { signOut, getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../firebase';  // Make sure this points to the correct Firebase configuration
+import { auth } from '../firebase';
 
 export default {
   name: 'LecturerPage',
@@ -68,13 +73,12 @@ export default {
   },
   computed: {
     currentPage() {
-      const pages = {
+      return {
         kpi: KpiPage,
         'instructor-schedule': InstructorSchedulePage,
         budget: BudgetPage,
         'self-development': SelfDevelopmentPage,
-      };
-      return pages[this.selectedOption];
+      }[this.selectedOption];
     },
   },
   methods: {
@@ -105,11 +109,11 @@ export default {
         onAuthStateChanged(authInstance, (user) => {
           if (user) {
             this.isAuthenticated = true;
-            this.lecturerName = user.displayName || 'Lecturer';  // Default name if empty
-            this.profilePhoto = user.photoURL || require('@/assets/logo.png');  
+            this.lecturerName = user.displayName || 'Lecturer';
+            this.profilePhoto = user.photoURL || require('@/assets/logo.png');
           } else {
             this.isAuthenticated = false;
-            this.$router.push('/');  // Redirect to login page if not authenticated
+            this.$router.push('/');
           }
         });
       })
@@ -123,19 +127,16 @@ export default {
 <style scoped>
 /* App Bar */
 .app-bar {
-  background-color: #034e69; /* Darker, more modern color */
+  background: linear-gradient(to right, #034e69, #0077b6);
   color: white;
-  padding: 20px 30px;
-  text-align: center;
-  font-size: 1.8rem;
-  font-weight: bold;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 15px 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 4px solid #4caf50; /* Subtle border */
+  font-size: 1.6rem;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
-
 .app-bar h1 {
   margin: 0;
 }
@@ -158,12 +159,13 @@ export default {
 
 /* Layout */
 .lecturer-page {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f4f6f9;
+  height: 100vh;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f4f6f9;
-  min-height: 100vh;
-  padding: 20px;
+  justify-content: space-between;
 }
 
 .content-container {
@@ -176,6 +178,8 @@ export default {
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   flex-wrap: wrap;
+  flex-grow: 1; /* Expand to fill space */
+  overflow-y: auto; /* Add scrolling if content is too long */
 }
 
 .menu {
@@ -340,5 +344,15 @@ export default {
   font-weight: bold;
   text-align: center;
   margin-top: 50px;
+}
+.footer {
+  background: #034e69;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  font-size: 1rem;
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0; /* Prevent shrinking */
+  margin-top: auto; /* Push to the bottom */
 }
 </style>
