@@ -106,7 +106,7 @@ export default {
           if (user) {
             this.isAuthenticated = true;
             this.lecturerName = user.displayName || 'Lecturer';  // Default name if empty
-            this.profilePhoto = user.photoURL || '/path/to/default/profile-photo.jpg';  // Default photo if empty
+            this.profilePhoto = user.photoURL || require('@/assets/logo.png');  
           } else {
             this.isAuthenticated = false;
             this.$router.push('/');  // Redirect to login page if not authenticated
