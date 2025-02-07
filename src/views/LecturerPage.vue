@@ -127,16 +127,19 @@ export default {
 <style scoped>
 /* App Bar */
 .app-bar {
-  background: linear-gradient(to right, #034e69, #0077b6);
+  background-color: #034e69; /* Darker, more modern color */
   color: white;
-  padding: 15px 30px;
+  padding: 20px 30px;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 1.6rem;
-  font-weight: bold;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-bottom: 4px solid #4caf50; /* Subtle border */
 }
+
 .app-bar h1 {
   margin: 0;
 }
@@ -159,13 +162,12 @@ export default {
 
 /* Layout */
 .lecturer-page {
-  font-family: 'Poppins', sans-serif;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f4f6f9;
   height: 100vh;
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 }
 
 .content-container {
@@ -178,8 +180,6 @@ export default {
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   flex-wrap: wrap;
-  flex-grow: 1; /* Expand to fill space */
-  overflow-y: auto; /* Add scrolling if content is too long */
 }
 
 .menu {
@@ -356,3 +356,5 @@ export default {
   margin-top: auto; /* Push to the bottom */
 }
 </style>
+
+
