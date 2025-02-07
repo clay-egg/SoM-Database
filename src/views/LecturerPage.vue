@@ -52,8 +52,8 @@ import KpiPage from './KpiPage.vue';
 import InstructorSchedulePage from './InstructorSchedulePage.vue';
 import BudgetPage from './BudgetPage.vue';
 import SelfDevelopmentPage from './SelfDevelopmentPage.vue';
-import { signOut } from 'firebase/auth';
-import { auth } from '../firebase'; // Assuming the Firebase authentication is set up
+import { signOut, getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../firebase';  // Make sure this points to the correct Firebase configuration
 
 export default {
   name: 'LecturerPage',
@@ -99,21 +99,24 @@ export default {
     },
   },
   created() {
-    auth.onAuthStateChanged(user => {
-  if (user) {
-    this.isAuthenticated = true;
-    this.lecturerName = user.displayName;
-    this.profilePhoto = user.photoURL;
-
-    console.log("Profile Photo URL:", this.profilePhoto); // Debugging
-    this.$forceUpdate(); // Force Vue to refresh UI
-  } else {
-    this.isAuthenticated = false;
-    this.$router.push('/');
-  }
-});
-}
-,
+    const authInstance = getAuth();
+    setPersistence(authInstance, browserLocalPersistence)
+      .then(() => {
+        onAuthStateChanged(authInstance, (user) => {
+          if (user) {
+            this.isAuthenticated = true;
+            this.lecturerName = user.displayName || 'Lecturer';  // Default name if empty
+            this.profilePhoto = user.photoURL || '/path/to/default/profile-photo.jpg';  // Default photo if empty
+          } else {
+            this.isAuthenticated = false;
+            this.$router.push('/');  // Redirect to login page if not authenticated
+          }
+        });
+      })
+      .catch((error) => {
+        console.error("Error setting persistence:", error);
+      });
+  },
 };
 </script>
 

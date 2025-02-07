@@ -20,10 +20,12 @@
   
         <!-- Right Section: Profile -->
         <div class="profile">
-        <img :src="profilePhoto" alt="Profile Photo" class="profile-photo" v-if="profilePhoto" />
-        <p class="profile-name">{{ deanName }}</p>
+          <img :src="profilePhoto" alt="Profile Photo" class="profile-photo" />
+          <div class="profile-info">
+            <h2 class="profile-name">{{ deanName }}</h2>
+          </div>
+        </div>
       </div>
-    </div>
   
       <!-- Placeholder for Selected Page -->
       <div class="page-content">
@@ -50,70 +52,73 @@
   import InstructorSchedulePage from './InstructorSchedulePage.vue';
   import BudgetPage from './BudgetPage.vue';
   import SelfDevelopmentPage from './SelfDevelopmentPage.vue';
-  import { signOut } from 'firebase/auth';
-  import { auth } from '../firebase'; // Assuming the Firebase authentication is set up
+  import { signOut, getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged } from 'firebase/auth';
+  import { auth } from '../firebase';  // Make sure this points to the correct Firebase configuration
   
   export default {
-  name: 'DeanPage',
-  data() {
-    return {
-      deanName: '',
-      profilePhoto: '',
-      selectedOption: 'kpi',
-      isAuthenticated: false,
-      showLogoutModal: false,
-    };
-  },
-  computed: {
-    currentPage() {
-      const pages = {
-        kpi: KpiPage,
-        'instructor-schedule': InstructorSchedulePage,
-        budget: BudgetPage,
-        'self-development': SelfDevelopmentPage,
+    name: 'DeanPage',
+    data() {
+      return {
+        deanName: '',
+        profilePhoto: '',
+        selectedOption: 'kpi',
+        isAuthenticated: false,
+        showLogoutModal: false,
       };
-      return pages[this.selectedOption];
     },
-  },
-  methods: {
-    navigateToPage() {
-      console.log(`Navigated to: ${this.selectedOption}`);
+    computed: {
+      currentPage() {
+        const pages = {
+          kpi: KpiPage,
+          'instructor-schedule': InstructorSchedulePage,
+          budget: BudgetPage,
+          'self-development': SelfDevelopmentPage,
+        };
+        return pages[this.selectedOption];
+      },
     },
-    openLogoutModal() {
-      this.showLogoutModal = true;
-    },
-    cancelLogout() {
-      this.showLogoutModal = false;
-    },
-    async confirmLogout() {
-      try {
-        await signOut(auth);
-        this.$router.push('/');
+    methods: {
+      navigateToPage() {
+        console.log(`Navigated to: ${this.selectedOption}`);
+      },
+      openLogoutModal() {
+        this.showLogoutModal = true;
+      },
+      cancelLogout() {
         this.showLogoutModal = false;
-      } catch (error) {
-        console.error("Error during logout: ", error);
-        this.showLogoutModal = false;
-      }
+      },
+      async confirmLogout() {
+        try {
+          await signOut(auth);
+          this.$router.push('/');
+          this.showLogoutModal = false;
+        } catch (error) {
+          console.error("Error during logout: ", error);
+          this.showLogoutModal = false;
+        }
+      },
     },
-  },
-  created() {
-    auth.onAuthStateChanged(user => {
-  if (user) {
-    this.isAuthenticated = true;
-    this.deanName = user.displayName;
-    this.profilePhoto = user.photoURL;
-
-    console.log("Profile Photo URL:", this.profilePhoto); // Debugging
-    this.$forceUpdate(); // Force Vue to refresh UI
-  } else {
-    this.isAuthenticated = false;
-    this.$router.push('/');
-  }
-});
-}
-,
-};
-</script>
+    created() {
+      const authInstance = getAuth();
+      setPersistence(authInstance, browserLocalPersistence)
+        .then(() => {
+          onAuthStateChanged(authInstance, (user) => {
+            if (user) {
+              this.isAuthenticated = true;
+              this.deanName = user.displayName || 'Dean';  // Default name if empty
+              this.profilePhoto = user.photoURL || '/path/to/default/profile-photo.jpg';  // Default photo if empty
+            } else {
+              this.isAuthenticated = false;
+              this.$router.push('/');  // Redirect to login page if not authenticated
+            }
+          });
+        })
+        .catch((error) => {
+          console.error("Error setting persistence:", error);
+        });
+    },
+  };
+  </script>
   
   <style scoped>
   /* App Bar */
