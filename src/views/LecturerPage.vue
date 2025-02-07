@@ -2,7 +2,7 @@
   <div class="lecturer-page" v-if="isAuthenticated">
     <!-- App Bar -->
     <header class="app-bar">
-      <div class="app-title">📘 Lecturer Panel</div>
+      <div class="app-title">Lecturer Panel</div>
       <button @click="openLogoutModal" class="logout-button">Logout</button>
     </header>
 

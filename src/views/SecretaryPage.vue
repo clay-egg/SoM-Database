@@ -1,10 +1,11 @@
 <template>
     <div class="secretary-page" v-if="isAuthenticated">
       <!-- App Bar -->
-      <header class="app-bar">
-        <h1>Secretary Dashboard</h1>
-        <button @click="openLogoutModal" class="logout-button">Logout</button>
-      </header>
+       <!-- App Bar -->
+    <header class="app-bar">
+      <div class="app-title">Secretary Panel</div>
+      <button @click="openLogoutModal" class="logout-button">Logout</button>
+    </header>
   
       <div class="content-container">
         <!-- Left Section: Menu -->

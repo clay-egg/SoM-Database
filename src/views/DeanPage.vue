@@ -2,9 +2,9 @@
     <div class="dean-page" v-if="isAuthenticated">
       <!-- App Bar -->
       <header class="app-bar">
-        <h1>Dean Dashboard</h1>
-        <button @click="openLogoutModal" class="logout-button">Logout</button>
-      </header>
+      <div class="app-title">Dean Panel</div>
+      <button @click="openLogoutModal" class="logout-button">Logout</button>
+    </header>
   
       <div class="content-container">
         <!-- Left Section: Menu -->
