@@ -33,10 +33,10 @@ export default {
             router.replace({ name: 'LecturerPage' });
           } else {
             alert('Access denied: This email is not associated with an authorized role.');
-            router.replace({ name: 'LoginPage' }); // Redirect to login if not authorized
+            router.replace({ name: 'HomePage' }); // Redirect to home if not authorized
           }
         } else {
-          // If no user is logged in, route to login page
+          // If no user is logged in, route to home page
           router.replace({ name: 'HomePage' });
         }
       });
