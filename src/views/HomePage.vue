@@ -119,7 +119,7 @@
 
     <!-- Footer -->
     <div class="footer">
-      <p>&copy; 2023 SoM Database. All rights reserved.</p>
+      <p>&copy; 2025 SoM Database. All rights reserved.</p>
       <p>Contact us: <a href="mailto:support@somdatabase.com">support@somdatabase.com</a></p>
     </div>
   </div>
