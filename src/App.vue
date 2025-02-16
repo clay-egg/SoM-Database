@@ -25,7 +25,7 @@ export default {
           // Redirect to appropriate page based on user email
           const userEmail = user.email;
 
-          if (userEmail === '6531503017@lamduan.mfu.ac.th') {
+          if (userEmail === '6531503172@lamduan.mfu.ac.th') {
             router.replace({ name: 'SecretaryPage' });
           } else if (userEmail === '6531503176@lamduan.mfu.ac.th') {
             router.replace({ name: 'DeanPage' });

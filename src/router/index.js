@@ -44,7 +44,7 @@ router.beforeEach((to, from, next) => {
       if (user) {
         // Redirect to the correct page based on user email
         const userEmail = user.email;
-        if (userEmail === '6531503017@lamduan.mfu.ac.th' && to.name === 'SecretaryPage') {
+        if (userEmail === '6531503172@lamduan.mfu.ac.th' && to.name === 'SecretaryPage') {
           next();
         } else if (userEmail === '6531503176@lamduan.mfu.ac.th' && to.name === 'DeanPage') {
           next();

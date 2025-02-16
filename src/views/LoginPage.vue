@@ -26,7 +26,7 @@ export default {
         const result = await signInWithPopup(auth, provider);
         const userEmail = result.user.email;
 
-          if (userEmail === '6531503017@lamduan.mfu.ac.th') {
+          if (userEmail === '6531503172@lamduan.mfu.ac.th') {
           router.push({ name: 'SecretaryPage' });
         } else if (userEmail === '6531503176@lamduan.mfu.ac.th') {
           router.push({ name: 'DeanPage' });
