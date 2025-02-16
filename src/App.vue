@@ -25,11 +25,11 @@ export default {
           // Redirect to appropriate page based on user email
           const userEmail = user.email;
 
-          if (userEmail === '6531503172@lamduan.mfu.ac.th') {
+          if (userEmail === 'myatminhan03@gmail.com') {
             router.replace({ name: 'SecretaryPage' });
           } else if (userEmail === '6531503176@lamduan.mfu.ac.th') {
             router.replace({ name: 'DeanPage' });
-          } else if (userEmail === '6531503174@lamduan.mfu.ac.th') {
+          } else if (userEmail === 'phyominthein.icloud@gmail.com') {
             router.replace({ name: 'LecturerPage' });
           } else {
             alert('Access denied: This email is not associated with an authorized role.');

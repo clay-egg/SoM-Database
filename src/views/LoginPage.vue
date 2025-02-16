@@ -26,11 +26,11 @@ export default {
         const result = await signInWithPopup(auth, provider);
         const userEmail = result.user.email;
 
-          if (userEmail === '6531503172@lamduan.mfu.ac.th') {
+          if (userEmail === 'myatminhan03@gmail.com') {
           router.push({ name: 'SecretaryPage' });
         } else if (userEmail === '6531503176@lamduan.mfu.ac.th') {
           router.push({ name: 'DeanPage' });
-        } else if (userEmail === '6531503174@lamduan.mfu.ac.th') {
+        } else if (userEmail === 'phyominthein.icloud@gmail.com') {
           router.push({ name: 'LecturerPage' });
         } else {
           alert('Access denied: This email is not associated with an authorized role.');
