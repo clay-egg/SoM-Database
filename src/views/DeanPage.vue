@@ -11,10 +11,9 @@
         <div class="menu">
           <label for="menu-dropdown" class="menu-label">Navigate</label>
           <select id="menu-dropdown" @change="navigateToPage" v-model="selectedOption">
-            <option value="kpi">KPI</option>
-            <option value="instructor-schedule">Instructor Schedule</option>
-            <option value="budget">Budget</option>
-            <option value="self-development">Self-Development</option>
+            <option value="research">Research</option>
+            <option value="academic">Academic Service</option>
+            <option value="mou">MOU/MOA</option>
           </select>
         </div>
   
@@ -52,10 +51,11 @@
   
   <script>
   // Import your pages
-  import KpiPage from './KpiPage.vue';
-  import InstructorSchedulePage from './InstructorSchedulePage.vue';
-  import BudgetPage from './BudgetPage.vue';
-  import SelfDevelopmentPage from './SelfDevelopmentPage.vue';
+  import ResearchPage from './ResearchPage.vue';
+  import AcademicPage from './AcademicPage.vue';
+  import MouPage from './MouPage.vue';
+  // Import Firebase Authentication and Firestore SDKs
+  // Make sure to replace the 'firebaseConfig' with your actual Firebase configuration
   import { signOut, getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged } from 'firebase/auth';
   import { auth } from '../firebase';  // Make sure this points to the correct Firebase configuration
   
@@ -65,7 +65,7 @@
       return {
         deanName: '',
         profilePhoto: '',
-        selectedOption: 'kpi',
+        selectedOption: 'research',
         isAuthenticated: false,
         showLogoutModal: false,
       };
@@ -73,10 +73,9 @@
     computed: {
       currentPage() {
         const pages = {
-          kpi: KpiPage,
-          'instructor-schedule': InstructorSchedulePage,
-          budget: BudgetPage,
-          'self-development': SelfDevelopmentPage,
+          research: ResearchPage,
+          academic: AcademicPage,
+          mou: MouPage,
         };
         return pages[this.selectedOption];
       },
